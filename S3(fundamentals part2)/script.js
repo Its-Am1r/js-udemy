@@ -168,7 +168,11 @@ const jonas = [firstName, 'Schmedtmann', 2037 - 1991, 'teacher', friends];
 console.log(jonas);
 console.log(jonas.length);
 
+<<<<<<< HEAD
 // Exercise
+=======
+
+>>>>>>> 126161988eaf2e0a2d10577c6f61c64d6d712732
 const calcAge = function (birthYeah) {
   return 2037 - birthYeah;
 }
