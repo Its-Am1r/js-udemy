@@ -324,3 +324,11 @@
 //     header.style.color = 'blue';
 //   });
 // })();
+
+function a() {
+  let counter = 0;
+
+  return function () {
+    ++counter;
+  };
+}
