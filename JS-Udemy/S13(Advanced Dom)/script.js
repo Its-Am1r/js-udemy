@@ -243,6 +243,7 @@ const slider = function () {
 
   // Next slide
   const nextSlide = function () {
+    clearInterval(timer);
     if (curSlide === maxSlide - 1) {
       curSlide = 0;
     } else {
@@ -254,6 +255,7 @@ const slider = function () {
   };
 
   const prevSlide = function () {
+    clearInterval(timer);
     if (curSlide === 0) {
       curSlide = maxSlide - 1;
     } else {
@@ -276,17 +278,35 @@ const slider = function () {
   btnLeft.addEventListener('click', prevSlide);
 
   document.addEventListener('keydown', function (e) {
+    console.log(e);
     if (e.key === 'ArrowLeft') prevSlide();
     e.key === 'ArrowRight' && nextSlide();
   });
 
   dotContainer.addEventListener('click', function (e) {
     if (e.target.classList.contains('dots__dot')) {
+      console.log(e.target.dataset);
       const { slide } = e.target.dataset;
+      console.log(slide);
       goToSlide(slide);
       activateDot(slide);
     }
   });
+
+  const slider = document.querySelector('.slider');
+  let timer;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        timer = setInterval(nextSlide, 3000);
+      } else {
+        clearInterval(timer);
+      }
+    });
+  });
+
+  observer.observe(slider);
 };
 slider();
 
