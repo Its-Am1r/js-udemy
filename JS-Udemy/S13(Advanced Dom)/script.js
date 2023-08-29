@@ -262,13 +262,12 @@ const slider = function () {
     activateDot(0);
   };
   init();
-  const NextSlide = function () {
+  const nextSlide2 = function () {
     if (curSlide === maxSlide - 1) {
       curSlide = 0;
     } else {
       curSlide++;
     }
-
     goToSlide(curSlide);
     activateDot(curSlide);
   };
@@ -283,13 +282,13 @@ const slider = function () {
   };
 
   // Event handlers
-  btnRight.addEventListener('click', NextSlide);
+  btnRight.addEventListener('click', nextSlide2);
   btnLeft.addEventListener('click', PrevSlide);
 
   document.addEventListener('keydown', function (e) {
     console.log(e);
     if (e.key === 'ArrowLeft') PrevSlide();
-    e.key === 'ArrowRight' && NextSlide();
+    e.key === 'ArrowRight' && nextSlide2();
     e.key === 'Enter' && (sliderPaused = !sliderPaused);
   });
 
