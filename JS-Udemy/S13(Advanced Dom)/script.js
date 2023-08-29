@@ -10,6 +10,7 @@ const nav = document.querySelector('.nav');
 const tabs = document.querySelectorAll('.operations__tab');
 const tabsContainer = document.querySelector('.operations__tab-container');
 const tabsContent = document.querySelectorAll('.operations__content');
+let sliderPaused = false;
 
 ///////////////////////////////////////
 // Modal window
@@ -243,24 +244,13 @@ const slider = function () {
 
   // Next slide
   const nextSlide = function () {
-    clearInterval(timer);
+    if (sliderPaused) return;
     if (curSlide === maxSlide - 1) {
       curSlide = 0;
     } else {
       curSlide++;
     }
 
-    goToSlide(curSlide);
-    activateDot(curSlide);
-  };
-
-  const prevSlide = function () {
-    clearInterval(timer);
-    if (curSlide === 0) {
-      curSlide = maxSlide - 1;
-    } else {
-      curSlide--;
-    }
     goToSlide(curSlide);
     activateDot(curSlide);
   };
@@ -272,15 +262,35 @@ const slider = function () {
     activateDot(0);
   };
   init();
+  const NextSlide = function () {
+    if (curSlide === maxSlide - 1) {
+      curSlide = 0;
+    } else {
+      curSlide++;
+    }
+
+    goToSlide(curSlide);
+    activateDot(curSlide);
+  };
+  const PrevSlide = function () {
+    if (curSlide === 0) {
+      curSlide = maxSlide - 1;
+    } else {
+      curSlide--;
+    }
+    goToSlide(curSlide);
+    activateDot(curSlide);
+  };
 
   // Event handlers
-  btnRight.addEventListener('click', nextSlide);
-  btnLeft.addEventListener('click', prevSlide);
+  btnRight.addEventListener('click', NextSlide);
+  btnLeft.addEventListener('click', PrevSlide);
 
   document.addEventListener('keydown', function (e) {
     console.log(e);
-    if (e.key === 'ArrowLeft') prevSlide();
-    e.key === 'ArrowRight' && nextSlide();
+    if (e.key === 'ArrowLeft') PrevSlide();
+    e.key === 'ArrowRight' && NextSlide();
+    e.key === 'Enter' && (sliderPaused = !sliderPaused);
   });
 
   dotContainer.addEventListener('click', function (e) {
@@ -300,7 +310,7 @@ const slider = function () {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         timer = setInterval(nextSlide, 3000);
-      } else {
+      } else if (!entry.isIntersecting) {
         clearInterval(timer);
       }
     });
