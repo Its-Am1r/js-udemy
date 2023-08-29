@@ -286,7 +286,6 @@ const slider = function () {
   btnLeft.addEventListener('click', PrevSlide);
 
   document.addEventListener('keydown', function (e) {
-    console.log(e);
     if (e.key === 'ArrowLeft') PrevSlide();
     e.key === 'ArrowRight' && nextSlide2();
     e.key === 'Enter' && (sliderPaused = !sliderPaused);
