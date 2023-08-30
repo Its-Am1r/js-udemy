@@ -10,7 +10,6 @@ const nav = document.querySelector('.nav');
 const tabs = document.querySelectorAll('.operations__tab');
 const tabsContainer = document.querySelector('.operations__tab-container');
 const tabsContent = document.querySelectorAll('.operations__content');
-let sliderPaused = false;
 
 ///////////////////////////////////////
 // Modal window
@@ -207,14 +206,16 @@ imgTargets.forEach((img) => imgObserver.observe(img));
 
 ///////////////////////////////////////
 // Slider
+
 const slider = function () {
   const slides = document.querySelectorAll('.slide');
   const btnLeft = document.querySelector('.slider__btn--left');
   const btnRight = document.querySelector('.slider__btn--right');
   const dotContainer = document.querySelector('.dots');
-
   let curSlide = 0;
   const maxSlide = slides.length;
+  let timer;
+  let paused = false;
 
   // Functions
   const createDots = function () {
@@ -230,7 +231,6 @@ const slider = function () {
     document
       .querySelectorAll('.dots__dot')
       .forEach((dot) => dot.classList.remove('dots__dot--active'));
-
     document
       .querySelector(`.dots__dot[data-slide="${slide}"]`)
       .classList.add('dots__dot--active');
@@ -242,80 +242,104 @@ const slider = function () {
     );
   };
 
-  // Next slide
-  const nextSlide = function () {
-    if (sliderPaused) return;
-    if (curSlide === maxSlide - 1) {
-      curSlide = 0;
-    } else {
-      curSlide++;
+  //handeling slides
+  const handleSlide = function (direction) {
+    switch (direction) {
+      case 'next':
+        if (curSlide === maxSlide - 1) {
+          curSlide = 0;
+        } else {
+          curSlide++;
+        }
+        break;
+      case 'prev':
+        if (curSlide === 0) {
+          curSlide = maxSlide - 1;
+        } else {
+          curSlide--;
+        }
+        break;
+      default:
+        break;
     }
-
     goToSlide(curSlide);
     activateDot(curSlide);
+  };
+
+  const nextSlide = function () {
+    handleSlide('next');
+  };
+
+  const prevSlide = function () {
+    handleSlide('prev');
   };
 
   const init = function () {
     goToSlide(0);
     createDots();
-
     activateDot(0);
   };
+
   init();
-  const nextSlide2 = function () {
-    if (curSlide === maxSlide - 1) {
-      curSlide = 0;
-    } else {
-      curSlide++;
-    }
-    goToSlide(curSlide);
-    activateDot(curSlide);
+
+  const pauseSlider = function () {
+    clearInterval(timer); // Clear the interval to pause the slider
+    paused = true;
   };
-  const PrevSlide = function () {
-    if (curSlide === 0) {
-      curSlide = maxSlide - 1;
-    } else {
-      curSlide--;
+
+  const resumeSlider = function () {
+    if (paused) {
+      timer = setInterval(nextSlide, 3000); // Restart the interval to resume the slider
+      paused = false;
     }
-    goToSlide(curSlide);
-    activateDot(curSlide);
+  };
+
+  const handleKeyPress = function (e) {
+    switch (e.key) {
+      case 'ArrowLeft':
+        prevSlide();
+        break;
+      case 'ArrowRight':
+        nextSlide();
+        break;
+      case 'Enter':
+        if (paused) {
+          resumeSlider();
+        } else {
+          pauseSlider();
+        }
+        break;
+      default:
+        break;
+    }
   };
 
   // Event handlers
-  btnRight.addEventListener('click', nextSlide2);
-  btnLeft.addEventListener('click', PrevSlide);
-
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'ArrowLeft') PrevSlide();
-    e.key === 'ArrowRight' && nextSlide2();
-    e.key === 'Enter' && (sliderPaused = !sliderPaused);
-  });
+  btnRight.addEventListener('click', nextSlide);
+  btnLeft.addEventListener('click', prevSlide);
+  document.addEventListener('keydown', handleKeyPress);
 
   dotContainer.addEventListener('click', function (e) {
     if (e.target.classList.contains('dots__dot')) {
-      console.log(e.target.dataset);
       const { slide } = e.target.dataset;
-      console.log(slide);
       goToSlide(slide);
       activateDot(slide);
     }
   });
 
   const slider = document.querySelector('.slider');
-  let timer;
-
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        timer = setInterval(nextSlide, 3000);
+        resumeSlider();
       } else if (!entry.isIntersecting) {
-        clearInterval(timer);
+        pauseSlider();
       }
     });
   });
-
   observer.observe(slider);
 };
+
 slider();
 
 ///////////////////////////////////////
