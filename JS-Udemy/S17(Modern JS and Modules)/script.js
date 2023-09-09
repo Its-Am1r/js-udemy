@@ -3,7 +3,7 @@
 // addToCart('bread', 5);
 // console.log(price, tq);
 
-import shoppingCart from './shoppingCart';
+// import shoppingCart from './shoppingCart';
 
 // console.log('IMPORTING MODULES');
 // // console.log(ShippingCost);
@@ -48,3 +48,24 @@ const addToCart = function (product, quantity) {
 // ShoppingCart2.addToCart('apple', 4);
 // ShoppingCart2.addToCart('pizza', 4);
 // console.log(ShoppingCart2);
+
+import { cloneDeep } from './node_modules/lodash-es/cloneDeep.js';
+
+const state = {
+  cart: [
+    {
+      product: 'bread',
+      quentity: 5,
+    },
+    {
+      product: 'pizza',
+      quentity: 5,
+    },
+  ],
+  user: { loggedIn: true },
+};
+const stateClone = Object.assign({}, state);
+const stateDeepClone = cloneDeep(state);
+console.log(stateClone);
+
+console.log(stateDeepClone);
