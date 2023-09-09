@@ -49,7 +49,7 @@ const addToCart = function (product, quantity) {
 // ShoppingCart2.addToCart('pizza', 4);
 // console.log(ShoppingCart2);
 
-import { cloneDeep } from './node_modules/lodash-es/cloneDeep.js';
+import cloneDeep from './node_modules/lodash-es/cloneDeep.js';
 
 const state = {
   cart: [
