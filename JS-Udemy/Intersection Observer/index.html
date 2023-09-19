@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Card Intersection Observer</title>
+
+    <script src="script.js" defer></script>
+  </head>
+  <style>
+    .card {
+      display: block;
+      height: 50px;
+      width: 60px;
+      background-color: #ccc;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      transition: transform 0.3s ease;
+    }
+
+    .show {
+      display: block;
+      transform: scale(1.1);
+    }
+
+    .card-container {
+      margin-top: 20px;
+    }
+  </style>
+  <body>
+    <div class="card-container">
+      <div class="card show">Card</div>
+      <div class="card">Card</div>
+      <div class="card">Card</div>
+      <div class="card">Card</div>
+      <div class="card">Card</div>
+    </div>
+  </body>
+</html>
